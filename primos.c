@@ -67,6 +67,18 @@ void imprimeLista_nr(node *p){
     return;
 }
 
+node *inicializaLista(){
+    node *ptr = (node *) malloc(sizeof(node)*1);
+    if(ptr == NULL){
+        printf("Alocacao de memoria falhou.");
+        return NULL;
+    }
+    (ptr -> valor) = 2;
+    (ptr -> next)  = NULL;
+
+    return ptr;
+}
+
 void imprimeLista(node *p){
     if(p == NULL){
         return;
@@ -97,22 +109,9 @@ void freeLista(node *p){
     return;
 }
 
-int main(){
-    u64 N = 100; 
-    
+void imprimeNPrimos(u64 N, node *ptr){
     u64 i = 1, p = 3;
-
-    node *ptr = (node *) malloc(sizeof(node)*1);
-    if(ptr == NULL){
-        printf("Alocacao de memoria falhou.");
-        return -1;
-    }
-    (ptr -> valor) = 2;
-    (ptr -> next)  = NULL;
     node *tail = ptr;
-
-    printf("Digite quantos numeros primos deseja encontrar:\n");
-    scanf("%llu", &N);
 
     while (i<N){
         int r = verificaPrimo_nr(ptr, tail, p);
@@ -127,6 +126,49 @@ int main(){
     }
 
     imprimeLista_nr(ptr);
+}
+
+u64 encontraPrimo(u64 N, node *ptr){
+    u64 i = 1, p = 3;
+    node *tail = ptr;
+
+    while (i<N){
+        int r = verificaPrimo_nr(ptr, tail, p);
+        if(r == -1){
+            break;
+        }
+        if(r == 1){
+            tail = (tail -> next);
+            i++;
+        }
+        p+=2;
+    }
+
+    return tail -> valor;
+}
+
+int main(){
+    u64 N = 100; 
+
+    node *ptr = inicializaLista();
+    if(ptr == NULL){
+        return -1;
+    }
+    node *tail = ptr;
+
+    printf("Digite quantos numeros primos deseja encontrar:\n");
+    scanf("%llu", &N);
+    /*
+    imprimeNPrimos(N,ptr);
+    freeLista_nr(ptr);
+
+    ptr = inicializaLista();
+    if(ptr == NULL){
+        return -1;
+    }
+    tail = ptr;
+    */
+    printf("\n%llu\n",encontraPrimo(N,ptr));
     freeLista_nr(ptr);
 
     return 0;
